@@ -38,14 +38,14 @@ public class PlayerScript : MonoBehaviour
     {
         x = Input.GetAxis("Horizontal" + IDString);
         y = Input.GetAxis("Vertical" + IDString);
-        /*if (x > y)
+        if (Mathf.Abs(x) > Mathf.Abs(y) )
         {
             y = 0;
         }
-        else if (y > x)
+        else if (Mathf.Abs(x) < Mathf.Abs(y))
         {
             x = 0;
-        }*/
+        }
         MyRigid.velocity = new Vector2(x * moveSpeed, y * moveSpeed);
         MoveAnimation();
     }
