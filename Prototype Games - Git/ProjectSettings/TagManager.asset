@@ -10,6 +10,7 @@ TagManager:
   - Explosion
   - Powerup
   - SiloMissile
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Crosshair
   - CameraBoundary
   - Player
-  - 
+  - Walls
   - 
   - 
   - 
@@ -44,6 +45,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Floor
+    uniqueID: 481372793
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
