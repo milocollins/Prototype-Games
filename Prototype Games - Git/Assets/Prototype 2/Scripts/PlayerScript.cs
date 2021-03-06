@@ -64,8 +64,6 @@ public class PlayerScript : MonoBehaviour
                 if (item.transform.CompareTag("Door"))
                 {
                     interactingObj = item.transform.gameObject;
-                    Debug.Log(interactingObj);
-                    //item.transform.gameObject.GetComponent<DoorLock>().DoorInteract();
                 }
             }
         }

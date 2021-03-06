@@ -11,6 +11,7 @@ TagManager:
   - Powerup
   - SiloMissile
   - Door
+  - NPC
   layers:
   - Default
   - TransparentFX
