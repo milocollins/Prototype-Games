@@ -13,6 +13,12 @@ public class PlayerScript : MonoBehaviour
     private Vector2 direction;
     internal float x = 0;
     internal float y = 0;
+    private float skillTimer = 0;
+    private bool skillCooldown = false;
+    private float cooldownTimer = 0;
+    public float cooldownInterval;
+    public float skillInterval;
+    private GameObject interactingObj;
 
     public enum PlayerID
     {
@@ -38,17 +44,49 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
+        if (skillCooldown)
+        {
+            cooldownTimer += Time.deltaTime;
+                if (cooldownTimer > cooldownInterval)
+                {
+                    cooldownTimer = 0;
+                    skillCooldown = false;
+                }
+        }
         x = Input.GetAxis("Horizontal" + IDString);
         y = Input.GetAxis("Vertical" + IDString);
         if (Input.GetButtonDown("Interact" + IDString))
         {
             Debug.Log(IDString + " interacted");
-            var Hits = Physics2D.RaycastAll(transform.position, -transform.right, range);
+            var Hits = Physics2D.RaycastAll(transform.position, direction, range);
             foreach (var item in Hits)
             {
                 if (item.transform.CompareTag("Door"))
                 {
+                    interactingObj = item.transform.gameObject;
+                    Debug.Log(interactingObj);
+                    //item.transform.gameObject.GetComponent<DoorLock>().DoorInteract();
                 }
+            }
+        }
+        if (Input.GetButton("Interact" + IDString) && !skillCooldown)
+        {
+            skillTimer += Time.deltaTime;
+            if (skillTimer > skillInterval)
+            {
+                interactingObj.GetComponent<Animator>().SetBool("isLocked", false);
+                interactingObj.GetComponent<DoorLock>().DoorInteract();
+                skillTimer = 0;
+                skillCooldown = true;
+                interactingObj = null;
+            }
+        }
+        if (Input.GetButtonUp("Interact" + IDString))
+        {
+            if (interactingObj != null)
+            {
+                interactingObj.GetComponent<DoorLock>().DoorInteract();
+                interactingObj = null;
             }
         }
 

@@ -4,37 +4,42 @@ using UnityEngine;
 
 public class DoorLock : MonoBehaviour
 {
-    public bool isLocked = false;
-    private bool isOpen;
-    private Animation MyAnim;
+    private Animator MyAnim;
+    private bool isLocked;
+    public GameObject unlockedChild;
 
     void Start()
     {
-        MyAnim = GetComponent<Animation>();
-        isOpen = false;
+        MyAnim = GetComponent<Animator>();
+        isLocked = MyAnim.GetBool("isLocked");
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Triggered");
-            DoorAnimation();
-        }
     }
-    public void DoorAnimation()
+    
+    
+    public void DoorInteract()
     {
+        isLocked = MyAnim.GetBool("isLocked");
         if (!isLocked)
         {
-            if (!isOpen)
+            GameObject go = Instantiate(unlockedChild, transform.GetChild(0).transform.position, Quaternion.identity);
+            transform.GetChild(0).gameObject.SetActive(false);
+            go.transform.SetParent(transform);
+            if (!MyAnim.GetBool("Opens"))
             {
-                MyAnim.Play("Side_Door_Open");
-            }/*
-            else
+                MyAnim.SetBool("Opens", true);
+            }
+            else if (MyAnim.GetBool("Opens"))
             {
-                MyAnim.Play("DoorClose1");
-            }*/
-            isOpen = !isOpen;
+                MyAnim.SetBool("Opens", false);
+            }
         }
-    }   
+        else
+        {
+            Debug.Log("Locked");
+            //Locked SFX
+        }
+    }
 }
