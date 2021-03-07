@@ -6,6 +6,9 @@ public class GuardScript : MonoBehaviour
 {
     public GameObject NodeParent;
     public GameObject[] node;
+    public GameObject alertIcon;
+    private GameObject privObj;
+    public float iconTime;
     public int currentNode;
     private Rigidbody2D MyRigid;
     private float waitTimer;
@@ -17,6 +20,10 @@ public class GuardScript : MonoBehaviour
     public float nodeRange;
     private Animator MyAnim;
     private bool wasUnlocked = false;
+    private GameObject FOV;
+    public float alertIconRange;
+    internal GameManager1.Status localStatus;
+
     void Start()
     {
         MyAnim = GetComponent<Animator>();
@@ -30,10 +37,23 @@ public class GuardScript : MonoBehaviour
         transform.position = node[0].transform.position;
         currentNode = 0;
         waiting = false;
+        MyAnim.SetFloat("facingY", -1f);
+        MyAnim.SetFloat("facingX", 0f);
+        FOV = transform.GetChild(0).gameObject;
+        localStatus = GameManager1.Status.green;
     }
-
+    private void FixedUpdate()
+    {
+        if (localStatus == GameManager1.Status.red)
+        {
+            Chase();
+        }
+    }
     void Update()
     {
+        if (localStatus != GameManager1.Status.red)
+        {
+            #region Node Pathfinding
         if (Mathf.Abs(Vector2.Distance(transform.position, node[currentNode].transform.position)) <= nodeRange)
         {
             waiting = true;
@@ -53,9 +73,36 @@ public class GuardScript : MonoBehaviour
             temp = Vector3.Normalize(node[currentNode].transform.position - transform.position);
             MyRigid.velocity = new Vector2(temp.x * speed, temp.y * speed);
             MyAnim.SetBool("isIdle", false);
+            MyAnim.SetFloat("facingX", MyRigid.velocity.x);
+            MyAnim.SetFloat("facingY", MyRigid.velocity.y);
+            if (MyRigid.velocity.x != 0)
+            {
+
+                if (MyRigid.velocity.x > 0)
+                {
+                    FOV.transform.rotation = Quaternion.Euler(0,0,90);
+                }
+                else
+                {
+                    FOV.transform.rotation = Quaternion.Euler(0, 0, -90);
+                }
+            }
+            else
+            {
+                if (MyRigid.velocity.y > 0)
+                {
+                    FOV.transform.rotation = Quaternion.Euler(0, 0, 180);
+                }
+                else
+                {
+                    FOV.transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+            }
             PassVelocity();
             waitTimer = 0;
             waiting = false;
+        }
+        #endregion
         }
     }
     private void PassVelocity()
@@ -124,5 +171,30 @@ public class GuardScript : MonoBehaviour
                 collision.gameObject.GetComponent<Animator>().SetBool("isLocked", true);
             }
         }
+    }
+    internal IEnumerator AlertIconToggle()
+    {
+        privObj = Instantiate(alertIcon, new Vector2(transform.position.x, transform.position.y + alertIconRange), Quaternion.identity);
+        MyRigid.velocity = Vector2.zero;
+        PassVelocity();
+        yield return new WaitForSeconds(iconTime);
+        privObj.SetActive(false);
+        localStatus = GameManager1.Status.red;
+    }
+    private void Chase()
+    {
+
+    }
+    public bool RayCast(GameObject p)
+    {
+        bool hitPlayer = false;
+        LayerMask pMask = LayerMask.GetMask("Player","Walls","Interactable");
+        Debug.DrawLine(transform.position, p.transform.position, Color.red);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, p.transform.position - transform.position, 10f, pMask);
+        if (hit && hit.transform.gameObject.CompareTag("Player"))
+        {
+            hitPlayer = true;
+        }
+        return hitPlayer;
     }
 }

@@ -40,6 +40,8 @@ public class PlayerScript : MonoBehaviour
             default:
                 break;
         }
+        MyAnim.SetFloat("facingY", 1f);
+        MyAnim.SetFloat("facingX", 0f);
     }
 
     void Update()
@@ -132,6 +134,8 @@ public class PlayerScript : MonoBehaviour
         else
         {
             MyAnim.SetBool("isIdle", false);
+            MyAnim.SetFloat("facingY", y);
+            MyAnim.SetFloat("facingX", x);
         }
     }
 }
