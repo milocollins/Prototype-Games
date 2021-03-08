@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 691992592}
   m_LocalRotation: {x: -0, y: -0, z: -0.258819, w: 0.9659259}
-  m_LocalPosition: {x: 5.97, y: 3.46, z: 0}
-  m_LocalScale: {x: 8.051995, y: 8.051995, z: 1}
+  m_LocalPosition: {x: 5.9, y: 3.5097, z: 0}
+  m_LocalScale: {x: 8.051995, y: 8.051995, z: 61.220837}
   m_Children: []
   m_Father: {fileID: 4855369907276472825}
   m_RootOrder: 0
@@ -383,7 +383,7 @@ GameObject:
   - component: {fileID: 109341884156562588}
   m_Layer: 2
   m_Name: Security Camera
-  m_TagString: Untagged
+  m_TagString: cameraNPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -420,6 +420,8 @@ MonoBehaviour:
   range: 5.85
   rotateSpeed: 10
   maxAngle: 40
+  maxAngleConstraint: 0
+  minAngleConstraint: 0
   changeDirectionInterval: 3
   thisDirection: 1
   alarmStatus: 0

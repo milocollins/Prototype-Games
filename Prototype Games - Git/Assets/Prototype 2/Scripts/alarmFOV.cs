@@ -7,6 +7,7 @@ public class alarmFOV : MonoBehaviour
     private Collider2D MyCollider;
     private SecurityCamera MyParent;
     internal bool Lock = false;
+    private bool hitPlayer = false;
     void Start()
     {
         MyCollider = GetComponent<Collider2D>();
@@ -19,21 +20,14 @@ public class alarmFOV : MonoBehaviour
         {
             if (collision.CompareTag("Player"))
             {
-                MyParent.alarmStatus = SecurityCamera.Alarm.yellow;
-                MyParent.AlarmStatusChange(SecurityCamera.Alarm.yellow);
+                hitPlayer = MyParent.RayCast(collision.gameObject);
+                if (hitPlayer)
+                {
+                    GameManager1.TheManager1.chaseTarget = collision.gameObject;
+                    GameManager1.TheManager1.RedAlert();
+                }
             }
 
-        }
-    }
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (!Lock)
-        {
-            if (other.CompareTag("Player"))
-            {
-                MyParent.alarmStatus = SecurityCamera.Alarm.green;
-                MyParent.AlarmStatusChange(SecurityCamera.Alarm.green);
-            }
         }
     }
 }

@@ -20,6 +20,7 @@ public class AlertFOV : MonoBehaviour
             hitPlayer = parent.RayCast(player);
             if (hitPlayer)
             {
+                GameManager1.TheManager1.chaseTarget = collision.gameObject;
                 parent.StartCoroutine("AlertIconToggle");
                 gameObject.SetActive(false);
             }

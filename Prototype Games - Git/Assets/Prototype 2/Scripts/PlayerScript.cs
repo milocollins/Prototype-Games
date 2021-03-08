@@ -17,13 +17,16 @@ public class PlayerScript : MonoBehaviour
     private bool skillCooldown = false;
     private float cooldownTimer = 0;
     public float cooldownInterval;
-    public float skillInterval;
+    private float skillInterval = 0.01f;
     private GameObject interactingObj;
+    private PlayerID playerCheck;
+    public GameObject waitPrefab;
+    private GameObject tempAnim;
 
     public enum PlayerID
     {
         _1,
-        _2
+        _2,
     }
     void Start()
     {
@@ -63,29 +66,70 @@ public class PlayerScript : MonoBehaviour
             var Hits = Physics2D.RaycastAll(transform.position, direction, range);
             foreach (var item in Hits)
             {
-                if (item.transform.CompareTag("Door"))
+                if (item.transform.CompareTag("Door") || item.transform.CompareTag("Vent"))
                 {
                     interactingObj = item.transform.gameObject;
+                    AssignSkillChecks();
+                    tempAnim = Instantiate(waitPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                }
+                if (item.transform.gameObject.CompareTag("Door1"))
+                {
+                    interactingObj = item.transform.gameObject;
+                    item.transform.gameObject.GetComponent<Double_Door>().InteractToggle();
                 }
             }
         }
-        if (Input.GetButton("Interact" + IDString) && !skillCooldown)
+        if (Input.GetButton("Interact" + IDString) && !skillCooldown && interactingObj.GetComponent<SkillCheck>())
         {
-            skillTimer += Time.deltaTime;
-            if (skillTimer > skillInterval)
+            if (ID == playerCheck)
             {
-                interactingObj.GetComponent<Animator>().SetBool("isLocked", false);
-                interactingObj.GetComponent<DoorLock>().DoorInteract();
-                skillTimer = 0;
+                skillTimer += Time.deltaTime;
+                if (skillTimer > skillInterval)
+                {
+                    if (interactingObj.CompareTag("Door"))
+                    {
+                        interactingObj.GetComponent<Animator>().SetBool("isLocked", false);
+                        interactingObj.GetComponent<DoorLock>().DoorInteract();
+                    }
+                    else if (interactingObj.CompareTag("Vent"))
+                    {
+                        interactingObj.GetComponent<BoxCollider2D>().enabled = false;
+                        interactingObj.transform.GetChild(0).gameObject.SetActive(false);
+                        Instantiate(interactingObj.GetComponent<Vent>().Icon,new Vector2(-4.47f, 31.35f), Quaternion.identity);
+                        SFXManager1.SFX.StartCoroutine("PlaySFX", "door_lock_SFX");
+                    }
+                    skillTimer = 0;
+                    skillCooldown = true;
+                    interactingObj = null;
+                    tempAnim.gameObject.SetActive(false);
+                    tempAnim = null;
+                }
+
+            }
+            else
+            {
                 skillCooldown = true;
-                interactingObj = null;
+                tempAnim.gameObject.SetActive(false);
+                tempAnim = null;
             }
         }
         if (Input.GetButtonUp("Interact" + IDString))
         {
+            if (tempAnim != null)
+            {
+                tempAnim.gameObject.SetActive(false);
+                tempAnim = null;
+            }
             if (interactingObj != null)
             {
-                interactingObj.GetComponent<DoorLock>().DoorInteract();
+                if (interactingObj.CompareTag("Door"))
+                {
+                    interactingObj.GetComponent<DoorLock>().DoorInteract();
+                }
+                else if (interactingObj.CompareTag("Vent"))
+                {
+                    SFXManager1.SFX.StartCoroutine("PlaySFX", "door_lock_SFX");
+                }
                 interactingObj = null;
             }
         }
@@ -136,6 +180,18 @@ public class PlayerScript : MonoBehaviour
             MyAnim.SetBool("isIdle", false);
             MyAnim.SetFloat("facingY", y);
             MyAnim.SetFloat("facingX", x);
+        }
+    }
+    private void AssignSkillChecks()
+    {
+        if (interactingObj.GetComponent<SkillCheck>())
+        {
+            skillInterval = interactingObj.GetComponent<SkillCheck>().skillInterval;
+            playerCheck = interactingObj.GetComponent<SkillCheck>().playerCheck;
+        }
+        else
+        {
+            skillInterval = 0.01f;
         }
     }
 }

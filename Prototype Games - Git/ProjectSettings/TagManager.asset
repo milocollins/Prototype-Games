@@ -12,6 +12,11 @@ TagManager:
   - SiloMissile
   - Door
   - NPC
+  - cameraNPC
+  - Window
+  - Vent
+  - TheAsset
+  - Door1
   layers:
   - Default
   - TransparentFX

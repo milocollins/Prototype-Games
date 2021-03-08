@@ -30,16 +30,18 @@ public class DoorLock : MonoBehaviour
             if (!MyAnim.GetBool("Opens"))
             {
                 MyAnim.SetBool("Opens", true);
+                SFXManager1.SFX.StartCoroutine("PlaySFX","door_open_SFX");
             }
             else if (MyAnim.GetBool("Opens"))
             {
                 MyAnim.SetBool("Opens", false);
+                SFXManager1.SFX.StartCoroutine("PlaySFX", "door_close_SFX");
             }
         }
         else
         {
             Debug.Log("Locked");
-            //Locked SFX
+            SFXManager1.SFX.StartCoroutine("PlaySFX", "door_lock_SFX");
         }
     }
 }

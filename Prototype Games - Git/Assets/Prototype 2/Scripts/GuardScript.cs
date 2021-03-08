@@ -23,6 +23,7 @@ public class GuardScript : MonoBehaviour
     private GameObject FOV;
     public float alertIconRange;
     internal GameManager1.Status localStatus;
+    internal GameObject chaseTarget;
 
     void Start()
     {
@@ -41,13 +42,6 @@ public class GuardScript : MonoBehaviour
         MyAnim.SetFloat("facingX", 0f);
         FOV = transform.GetChild(0).gameObject;
         localStatus = GameManager1.Status.green;
-    }
-    private void FixedUpdate()
-    {
-        if (localStatus == GameManager1.Status.red)
-        {
-            Chase();
-        }
     }
     void Update()
     {
@@ -103,6 +97,10 @@ public class GuardScript : MonoBehaviour
             waiting = false;
         }
         #endregion
+        }
+        else
+        {
+            Chase();
         }
     }
     private void PassVelocity()
@@ -176,14 +174,16 @@ public class GuardScript : MonoBehaviour
     {
         privObj = Instantiate(alertIcon, new Vector2(transform.position.x, transform.position.y + alertIconRange), Quaternion.identity);
         MyRigid.velocity = Vector2.zero;
+        MyAnim.SetBool("isIdle", true);
         PassVelocity();
         yield return new WaitForSeconds(iconTime);
         privObj.SetActive(false);
-        localStatus = GameManager1.Status.red;
+        GameManager1.TheManager1.RedAlert();
+        MyAnim.SetBool("isIdle", false);
     }
     private void Chase()
     {
-
+        MyRigid.velocity = Vector3.Normalize(chaseTarget.transform.position - transform.position) * chaseSpeed;
     }
     public bool RayCast(GameObject p)
     {
@@ -196,5 +196,12 @@ public class GuardScript : MonoBehaviour
             hitPlayer = true;
         }
         return hitPlayer;
+    }
+    public void LocalRedAlert()
+    {
+        localStatus = GameManager1.Status.red;
+        MyRigid.velocity = Vector2.zero;
+        PassVelocity();
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 }
