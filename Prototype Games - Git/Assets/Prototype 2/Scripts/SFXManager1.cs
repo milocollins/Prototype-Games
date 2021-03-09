@@ -47,6 +47,10 @@ public class SFXManager1 : MonoBehaviour
         GO.transform.localPosition = Vector2.zero;
         AudioSource AS = GO.transform.GetComponent<AudioSource>();
         AS.clip = audioLibrary[name];
+        if (name == "alarm_loop")
+        {
+            loopVolume = 0.1f;
+        }
         AS.volume = loopVolume;
         AS.loop = true;
         AS.Play();

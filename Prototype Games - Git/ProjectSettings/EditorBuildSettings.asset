@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Missile Command.unity
     guid: b6f1bc52828892049aba5fe53e7cca8a
+  - enabled: 1
+    path: Assets/Prototype 2/Scenes/Prototype_2.unity
+    guid: cebc45c87044f3c43a0a41109c547ce6
+  - enabled: 1
+    path: Assets/Prototype 2/Scenes/Prototype_2_Win.unity
+    guid: 70929a240dbb6664ba98b11e6482ac17
+  - enabled: 1
+    path: Assets/Prototype 2/Scenes/Prototype_2_Lose.unity
+    guid: 54f5f1292b5b95348adf2b22629effc8
   m_configObjects: {}

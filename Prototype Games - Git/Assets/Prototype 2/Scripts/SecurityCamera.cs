@@ -20,6 +20,7 @@ public class SecurityCamera : MonoBehaviour
     private Color FOVGreen = new Color(0, 1f, 0f, 0.5f);
     private Color FOVRed = new Color(1f, 0f, 0.07f, 0.5f);
     private Collider2D FOV;
+    internal bool cameraActive = true;
     public enum Facing
     {
         left,
@@ -48,25 +49,28 @@ public class SecurityCamera : MonoBehaviour
     }
     private void Update()
     {
-        switch (thisDirection)
+        if (cameraActive)
         {
-            case Facing.left:
-                raycastDirection = -child.transform.right;
-                break;
-            case Facing.right:
-                raycastDirection = child.transform.right;
-                break;
-        }
-        if (Mathf.Abs(rotatePosition) == maxAngle)
-        {
-            if (currentTimer < changeDirectionInterval)
+            switch (thisDirection)
             {
-                currentTimer += Time.deltaTime;
+                case Facing.left:
+                    raycastDirection = -child.transform.right;
+                    break;
+                case Facing.right:
+                    raycastDirection = child.transform.right;
+                    break;
             }
-            else
+            if (Mathf.Abs(rotatePosition) == maxAngleConstraint || Mathf.Abs(rotatePosition) == minAngleConstraint)
             {
-                rotateSpeed = -rotateSpeed;
-                currentTimer = 0;
+                if (currentTimer < changeDirectionInterval)
+                {
+                    currentTimer += Time.deltaTime;
+                }
+                else
+                {
+                    rotateSpeed = -rotateSpeed;
+                    currentTimer = 0;
+                }
             }
         }
     }

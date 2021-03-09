@@ -17,6 +17,8 @@ TagManager:
   - Vent
   - TheAsset
   - Door1
+  - CameraConsole
+  - AlarmPanel
   layers:
   - Default
   - TransparentFX

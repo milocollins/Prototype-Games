@@ -9,7 +9,7 @@ public class Van : MonoBehaviour
     private Color neutral = new Color(255f, 255f, 255f, 0.4f);
     private Color yellow = new Color(1f, 0.87f, 0f, 0.5f);
     private SpriteRenderer childRend;
-    internal bool haveAsset = false;
+    public bool haveAsset = false;
 
     private void Start()
     {
@@ -40,8 +40,7 @@ public class Van : MonoBehaviour
             }
             if (player1Here && player2Here)
             {
-                Debug.Log("WIN");
-                //GAME WIN    
+                GameManager1.TheManager1.EndGame(GameManager1.GameState.win);
             }
         }
     }

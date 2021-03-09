@@ -66,13 +66,17 @@ public class PlayerScript : MonoBehaviour
             var Hits = Physics2D.RaycastAll(transform.position, direction, range);
             foreach (var item in Hits)
             {
-                if (item.transform.CompareTag("Door") || item.transform.CompareTag("Vent"))
+                if (item.transform.CompareTag("TheAsset"))
+                {
+                    GameManager1.TheManager1.DisplayAlarmCheck();
+                }
+                else if (item.transform.CompareTag("Door") || item.transform.CompareTag("Vent") || item.transform.CompareTag("CameraConsole") || item.transform.CompareTag("AlarmPanel"))
                 {
                     interactingObj = item.transform.gameObject;
                     AssignSkillChecks();
                     tempAnim = Instantiate(waitPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
                 }
-                if (item.transform.gameObject.CompareTag("Door1"))
+                else if (item.transform.gameObject.CompareTag("Door1"))
                 {
                     interactingObj = item.transform.gameObject;
                     item.transform.gameObject.GetComponent<Double_Door>().InteractToggle();
@@ -97,6 +101,14 @@ public class PlayerScript : MonoBehaviour
                         interactingObj.transform.GetChild(0).gameObject.SetActive(false);
                         Instantiate(interactingObj.GetComponent<Vent>().Icon,new Vector2(-4.47f, 31.35f), Quaternion.identity);
                         SFXManager1.SFX.StartCoroutine("PlaySFX", "door_lock_SFX");
+                    }
+                    else if (interactingObj.CompareTag("CameraConsole"))
+                    {
+                        GameManager1.TheManager1.DeactivateCameras();
+                    }
+                    else if (interactingObj.CompareTag("AlarmPanel"))
+                    {
+                        GameManager1.TheManager1.DeactivateDisplayAlarm();
                     }
                     skillTimer = 0;
                     skillCooldown = true;

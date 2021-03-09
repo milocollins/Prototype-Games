@@ -156,17 +156,19 @@ public class GuardScript : MonoBehaviour
                 wasUnlocked = true;
             }
             collision.gameObject.GetComponent<Animator>().SetBool("Opens", true);
-            Debug.Log("TRUE");
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("Door"))
         {
-            collision.gameObject.GetComponent<Animator>().SetBool("Opens", false);
-            if (!wasUnlocked)
+            if (Mathf.Abs(transform.position.x - collision.transform.position.x) > 0.4)
             {
-                collision.gameObject.GetComponent<Animator>().SetBool("isLocked", true);
+                collision.gameObject.GetComponent<Animator>().SetBool("Opens", false);
+                if (!wasUnlocked)
+                {
+                    collision.gameObject.GetComponent<Animator>().SetBool("isLocked", true);
+                }
             }
         }
     }
@@ -184,6 +186,10 @@ public class GuardScript : MonoBehaviour
     private void Chase()
     {
         MyRigid.velocity = Vector3.Normalize(chaseTarget.transform.position - transform.position) * chaseSpeed;
+        if (Mathf.Abs(Vector2.Distance(transform.position, chaseTarget.transform.position)) < 0.2)
+        {
+            GameManager1.TheManager1.EndGame(GameManager1.GameState.lose);
+        }
     }
     public bool RayCast(GameObject p)
     {
