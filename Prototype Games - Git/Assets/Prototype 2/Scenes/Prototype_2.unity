@@ -313,7 +313,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3.5
+  orthographic size: 4.5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -956,7 +956,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3.5
+  orthographic size: 4.5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -14615,7 +14615,6 @@ MonoBehaviour:
   theAsset: {fileID: 1915654996}
   van: {fileID: 2065784182}
   inactiveAlarm: {fileID: 2395769629526408931, guid: 328c252c757eb7d4ca4042553e76c4b8, type: 3}
-  navigator: {fileID: 0}
   timerInterval: 60
   currentStatus: 0
 --- !u!4 &1839489762

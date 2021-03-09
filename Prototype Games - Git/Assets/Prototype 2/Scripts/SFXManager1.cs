@@ -54,7 +54,6 @@ public class SFXManager1 : MonoBehaviour
         AS.volume = loopVolume;
         AS.loop = true;
         AS.Play();
-        Debug.Log("z");
         return GO;
     }
 }

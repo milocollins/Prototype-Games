@@ -16,7 +16,6 @@ public class GameMenu : MonoBehaviour
     public string button0name;
     public string button1name;
 
-    public Sprite theBackdrop;
     private void Awake()
     {
         thisSFX = GameObject.Find("SFX Manager").GetComponent<SFXManager1>();
