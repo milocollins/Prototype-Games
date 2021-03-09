@@ -16,7 +16,6 @@ public class GameManager1 : MonoBehaviour
     public GameObject theAsset;
     public GameObject van;
     public Sprite inactiveAlarm;
-    public SceneNav navigator;
     private bool Countdown = false;
     private float currentTimer;
     public float timerInterval;
@@ -40,7 +39,6 @@ public class GameManager1 : MonoBehaviour
         time = transform.GetComponentInChildren<Canvas>().GetComponentInChildren<Text>();
         transform.GetChild(0).gameObject.SetActive(false);
         TheManager1 = this;
-        navigator = gameObject.GetComponent<SceneNav>();
         currentTimer = timerInterval;
         currentStatus = Status.green;
         foreach (var item in GameObject.FindGameObjectsWithTag("cameraNPC"))
@@ -112,6 +110,21 @@ public class GameManager1 : MonoBehaviour
     internal void EndGame(GameManager1.GameState gs)
     {
         currentGameState = gs;
-        navigator.NavTo();
+        string navToString ="";
+        switch (currentGameState)
+        {
+            case GameState.inProgress:
+                navToString = "Prototype_2_Pause";
+                break;
+            case GameState.win:
+                navToString = "Prototype_2_Win";
+                break;
+            case GameState.lose:
+                navToString = "Prototype_2_Lose";
+                break;
+            default:
+                break;
+        }
+        SceneNav.NavTo(navToString);
     }
 }

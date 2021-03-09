@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Prototype 2/Scenes/Prototype_2.unity
+- path: Assets/Prototype 2/Scenes/Prototype_2_Win.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
