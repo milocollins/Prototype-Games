@@ -1141,7 +1141,7 @@ MonoBehaviour:
   loopSFX: menu_win
   button0name: Replay
   button1name: Return To Menu
-  theBackdrop: {fileID: 0}
+  StartMenu: 0
 --- !u!4 &1829474835
 Transform:
   m_ObjectHideFlags: 0

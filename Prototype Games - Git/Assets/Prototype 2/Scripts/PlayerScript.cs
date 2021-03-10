@@ -105,10 +105,12 @@ public class PlayerScript : MonoBehaviour
                     else if (interactingObj.CompareTag("CameraConsole"))
                     {
                         GameManager1.TheManager1.DeactivateCameras();
+                        interactingObj.transform.GetChild(0).transform.GetComponent<SpriteRenderer>().color = Color.blue;
                     }
                     else if (interactingObj.CompareTag("AlarmPanel"))
                     {
                         GameManager1.TheManager1.DeactivateDisplayAlarm();
+                        interactingObj.transform.GetChild(0).transform.GetComponent<SpriteRenderer>().color = Color.blue;
                     }
                     skillTimer = 0;
                     skillCooldown = true;

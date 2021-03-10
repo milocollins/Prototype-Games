@@ -20,6 +20,7 @@ public class GameManager1 : MonoBehaviour
     private float currentTimer;
     public float timerInterval;
     private Text time;
+    public GameObject pauseMenu;
 
     internal enum GameState
     {
@@ -56,6 +57,13 @@ public class GameManager1 : MonoBehaviour
             if (currentTimer <= 0)
             {
                 EndGame(GameState.lose);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Joystick1Button9) || Input.GetKeyDown(KeyCode.Joystick2Button9))
+        {
+            if (!GameObject.Find("Pause Menu"))
+            {
+                Instantiate(pauseMenu);
             }
         }
     }

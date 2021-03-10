@@ -15,6 +15,7 @@ public class GameMenu : MonoBehaviour
     public string loopSFX;
     public string button0name;
     public string button1name;
+    public bool StartMenu;
 
     private void Awake()
     {
@@ -31,7 +32,6 @@ public class GameMenu : MonoBehaviour
         button0.GetComponentInChildren<Text>().text = button0name;
         button1.GetComponentInChildren<Text>().text = button1name;
     }
-
     public void Button_Click(string s)
     {
         SceneNav.NavTo(s);
