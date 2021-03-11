@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Missile Command.unity
     guid: b6f1bc52828892049aba5fe53e7cca8a
   - enabled: 1
