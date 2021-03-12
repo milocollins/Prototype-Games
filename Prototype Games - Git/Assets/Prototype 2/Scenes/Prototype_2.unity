@@ -14877,7 +14877,7 @@ MonoBehaviour:
   theAsset: {fileID: 1915654996}
   van: {fileID: 2065784182}
   inactiveAlarm: {fileID: 2395769629526408931, guid: 328c252c757eb7d4ca4042553e76c4b8, type: 3}
-  timerInterval: 60
+  timerInterval: 30
   pauseMenu: {fileID: 3476822324089246, guid: 14bd39675111e4741a850a9d0067c3fc, type: 3}
   currentStatus: 0
 --- !u!4 &1839489762

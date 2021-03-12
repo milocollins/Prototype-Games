@@ -186,6 +186,7 @@ public class GuardScript : MonoBehaviour
     private void Chase()
     {
         MyRigid.velocity = Vector3.Normalize(chaseTarget.transform.position - transform.position) * chaseSpeed;
+        PassVelocity();
         if (Mathf.Abs(Vector2.Distance(transform.position, chaseTarget.transform.position)) < 0.2)
         {
             GameManager1.TheManager1.EndGame(GameManager1.GameState.lose);

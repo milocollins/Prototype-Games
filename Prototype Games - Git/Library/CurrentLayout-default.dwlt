@@ -122,7 +122,7 @@ MonoBehaviour:
   m_MinSize: {x: 678, y: 492}
   m_MaxSize: {x: 14002, y: 14042}
   vertical: 0
-  controlID: 392
+  controlID: 942
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 402, y: 492}
   m_MaxSize: {x: 10001, y: 14042}
   vertical: 1
-  controlID: 347
+  controlID: 943
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_MinSize: {x: 402, y: 221}
   m_MaxSize: {x: 8002, y: 4021}
   vertical: 0
-  controlID: 399
+  controlID: 944
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -404,7 +404,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 5cfbffff
+      m_ExpandedIDs: c6e7ffffe4e7ffffe6e7ffffeae7ffffeee7fffff2e7ffffdeeaffffc8ebffffe6ebffff98ecffffa0ecffffa2eeffffaaeeffff4af7ffff68f7ffff16f8ffff1af8ffff18faffff1cfaffff5cfbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -880,21 +880,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prototype 2/Prefabs
+    - Assets/Prototype 2/Scenes
     m_Globs: []
   m_ViewMode: 1
   m_StartGridSize: 92
   m_LastFolders:
-  - Assets/Prototype 2/Prefabs
+  - Assets/Prototype 2/Scenes
   m_LastFoldersGridSize: 92
   m_LastProjectPath: E:\UniWork\Game Design yr2\Semester 2\Prototyping (SOLO)\Prototype-Games\Prototype
     Games - Git
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 30}
-    m_SelectedIDs: 4a3c0000
-    m_LastClickedID: 15434
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 503c0000
+    m_LastClickedID: 15440
     m_ExpandedIDs: 00000000343c0000443c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -923,7 +923,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000343c000000ca9a3b
+    m_ExpandedIDs: 00000000343c0000443c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -950,7 +950,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000e83b00000000000082370000663c0000e6370000d2410000761602006e1c02006c3a0000883b0000ea4f0000e24f0000c8390000c2390000ee390000483e0000003900007a3e000046390000ce380000883a00007c4200008a3a0000c03a0000368700005c40000020710000503e0000543e0000783c0000da610000fc3b0000dc610000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

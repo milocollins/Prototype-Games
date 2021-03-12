@@ -26,6 +26,11 @@ public class GameMenu : MonoBehaviour
     }
     private void Start()
     {
+        if (!StartMenu)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
         thisSFX.StartLoop(loopSFX);
         Title.GetComponent<Text>().text = title;
         Title.GetComponent<Text>().color = titleColor;

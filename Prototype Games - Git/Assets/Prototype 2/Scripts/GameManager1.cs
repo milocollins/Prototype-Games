@@ -47,6 +47,8 @@ public class GameManager1 : MonoBehaviour
             securityCameras.Add(item);
         }
         backgroundGO = SFXManager1.SFX.StartLoop("lobby_loop");
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     private void Update()
     {
