@@ -19,6 +19,9 @@ TagManager:
   - Door1
   - CameraConsole
   - AlarmPanel
+  - Death
+  - Wall
+  - Environment
   layers:
   - Default
   - TransparentFX
@@ -36,9 +39,9 @@ TagManager:
   - FOV
   - NPC
   - Interactable
-  - 
-  - 
-  - 
+  - Ground
+  - FriendlyProjectile
+  - Shield
   - 
   - 
   - 

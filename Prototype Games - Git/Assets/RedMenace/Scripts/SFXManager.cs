@@ -12,20 +12,19 @@ public class SFXManager : MonoBehaviour
     internal static SFXManager SFX = null;
     
     public float loopVolume;
-
-
+    
     private void Awake()
     {
         SFX = this;
         audioLibrary = new Dictionary<string, AudioClip>();
-
+    
         foreach (AudioClip item in audioClips)
         {
             audioLibrary.Add(item.name, item);
         }
         
     }
-
+    
     public IEnumerator PlaySFX(string name)
     {
         GameObject GO = Instantiate(audioSourcePrefab);
@@ -43,4 +42,5 @@ public class SFXManager : MonoBehaviour
         AS.loop = true;
         return GO;
     }
+
 }
