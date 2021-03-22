@@ -17,6 +17,10 @@ public class MeleeUnderling : MonoBehaviour
     public int damage;
     public float attackRange;
 
+    private Vector2 v;
+    private Vector2 leftScale;
+    private Vector2 rightScale;
+
     public enum AIstate
     {
         patrolling,
@@ -33,6 +37,8 @@ public class MeleeUnderling : MonoBehaviour
 
     void Start()
     {
+        leftScale = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+        rightScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
         health = maxHealth;
         MyRigid = GetComponent<Rigidbody2D>();
         MyAnim = GetComponent<Animator>();
@@ -43,7 +49,6 @@ public class MeleeUnderling : MonoBehaviour
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
     }
-
     void Update()
     {
         if (Mathf.Abs(MyRigid.velocity.x) >0.01)
@@ -69,9 +74,24 @@ public class MeleeUnderling : MonoBehaviour
         #region Dying
         else if (currentState == AIstate.dying)
         {
-            MyRigid.velocity = Vector2.zero;
+            v = Vector2.zero;
         }
         #endregion
+    }
+    public void FixedUpdate()
+    {
+        MyRigid.velocity = v;
+        if (v.x > 0)
+        {
+            transform.localScale = rightScale;
+            direction = Facing.right;
+        }
+        else if (v.x < 0)
+        {
+            transform.localScale = leftScale;
+            direction = Facing.left;
+
+        }
     }
     public void TakeDamage(int d)
     {
@@ -104,21 +124,20 @@ public class MeleeUnderling : MonoBehaviour
             {
                 currentState = AIstate.attacking;
             }
-            else
+            else if (hit.transform.CompareTag("Environment"))
             {
                 if (direction == Facing.left)
                 {
                     direction = Facing.right;
-                    transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 }
                 else
                 {
                     direction = Facing.left;
-                    transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 }
+
             }
         }
-        MyRigid.velocity = new Vector2(speed * (direction == Facing.left ? -1 : 1), 0f);
+        v = new Vector2(speed * (direction == Facing.left ? -1 : 1), 0f);
     }
     internal void Attacking()
     {
@@ -127,20 +146,21 @@ public class MeleeUnderling : MonoBehaviour
             RaycastHit2D hit;
             if (Player.thePlayer.transform.position.x > transform.position.x)
             {
-                MyRigid.velocity = transform.right * speed;
+                v = transform.right * speed;
                 hit = Physics2D.Raycast(transform.position, transform.right, attackRange);
             }
             else
             {
-                MyRigid.velocity = -transform.right * speed;
+                v = -transform.right * speed;
                 hit = Physics2D.Raycast(transform.position, -transform.right, attackRange);
             }
-            if (hit && hit.transform.gameObject.name == "Player")
+            if (hit && (hit.transform.gameObject.name == "Player" || hit.transform.gameObject.name.Contains("Ice Wall")))
             {
+                StartCoroutine("AttackSFX");
                 MyAnim.SetTrigger("isAttacking");
                 attackTimer = 0;
                 cooldown = true;
-                MyRigid.velocity = Vector2.zero;
+                v = Vector2.zero;
             }
         }
         else
@@ -161,6 +181,16 @@ public class MeleeUnderling : MonoBehaviour
             {
                 Player.thePlayer.TakeDamage(damage);
             }
+            else if (hit.transform.gameObject.name.Contains("Ice Wall"))
+            {
+                hit.transform.GetComponent<PlayerAbility>().TakeDamage();
+            }
+            
         }
+    }
+    public IEnumerator AttackSFX()
+    {
+        yield return new WaitForSeconds(0.3f);
+        SFXManager3.theManager.PlaySFX("Underling_Melee");
     }
 }

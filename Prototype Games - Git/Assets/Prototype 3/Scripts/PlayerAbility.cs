@@ -12,6 +12,8 @@ public class PlayerAbility : MonoBehaviour
     }
     public Type myType;
     public float wallDistance;
+    internal int wallHealth;
+    public int maxWallHealth;
     public float spikeDistance;
     public float meleeRange;
     private int direction;
@@ -29,6 +31,7 @@ public class PlayerAbility : MonoBehaviour
         switch (myType)
         {
             case Type.melee:
+                SFXManager3.theManager.PlaySFX("Ice_Melee");
                 RaycastHit2D hit = Physics2D.Raycast(Player.thePlayer.transform.position, transform.right * direction, meleeRange);
                 if (hit)
                 {
@@ -48,17 +51,25 @@ public class PlayerAbility : MonoBehaviour
                         }
                         else
                         {
+                            hit.transform.GetComponent<Boss>().TakeDamage(Player.thePlayer.meleeDamage);
                         }
+                    }
+                    else if (hit.transform.gameObject.name.Contains("Ice Wall"))
+                    {
+                        hit.transform.gameObject.GetComponent<PlayerAbility>().TakeDamage();
                     }
                 }
                 gameObject.SetActive(false);
                 break;
             case Type.ranged:
+                SFXManager3.theManager.PlaySFX("Ice_Ranged");
                 transform.position = new Vector2(Player.thePlayer.transform.position.x + direction * spikeDistance, Player.thePlayer.transform.position.y);
                 myRigid.velocity = new Vector2(spikeSpeed * direction, 0);
                 MyAnim.Play("Spike_1");
                 break;
             case Type.shield:
+                SFXManager3.theManager.PlaySFX("Ice_Wall");
+                wallHealth = maxWallHealth;
                 transform.position = new Vector2(Player.thePlayer.transform.position.x + direction * wallDistance, Player.thePlayer.transform.position.y + wallHeight);
                 StartCoroutine("WallSpawnFX");
                 break;
@@ -83,10 +94,18 @@ public class PlayerAbility : MonoBehaviour
             {
                 collision.gameObject.GetComponent<RangedUnderling>().TakeDamage(d);
             }
+            else if (collision.gameObject.GetComponent<Boss>())
+            {
+                collision.gameObject.GetComponent<Boss>().TakeDamage(d);
+            }
         }
-        if (collision.gameObject.GetComponent<Door>())
+        else if (collision.gameObject.GetComponent<Door>())
         {
             collision.gameObject.GetComponent<Door>().TakeDamage();
+        }
+        else if (collision.gameObject.name.Contains("Ice Wall"))
+        {
+            collision.gameObject.GetComponent<PlayerAbility>().TakeDamage();
         }
     }
     public void StopAnim()
@@ -98,5 +117,16 @@ public class PlayerAbility : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(0.9f);
         transform.GetChild(0).gameObject.SetActive(false);
+    }
+    public void TakeDamage()
+    {
+        if (myType == Type.shield)
+        {
+            --wallHealth;
+            if (wallHealth<= 0)
+            {
+                gameObject.SetActive(false);
+            }
+        }
     }
 }

@@ -18,6 +18,9 @@ public class RangedUnderling : MonoBehaviour
     public float runSpeed;
     private bool escaping = false;
 
+    private Vector2 v;
+    private Vector2 leftScale;
+    private Vector2 rightScale;
     public enum AIstate
     {
         patrolling,
@@ -35,6 +38,8 @@ public class RangedUnderling : MonoBehaviour
 
     void Start()
     {
+        leftScale = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+        rightScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
         health = maxHealth;
         MyRigid = GetComponent<Rigidbody2D>();
         MyAnim = GetComponent<Animator>();
@@ -45,7 +50,21 @@ public class RangedUnderling : MonoBehaviour
         }
         MyRigid.velocity = Vector2.zero;
     }
+    public void FixedUpdate()
+    {
+        MyRigid.velocity = v;
+        if (v.x > 0)
+        {
+            transform.localScale = rightScale;
+            direction = Facing.right;
+        }
+        else if (v.x < 0)
+        {
+            transform.localScale = leftScale;
+            direction = Facing.left;
 
+        }
+    }
     void Update()
     {
         if (Mathf.Abs(MyRigid.velocity.x) > 0.01)
@@ -71,7 +90,7 @@ public class RangedUnderling : MonoBehaviour
         #region Dying
         else if (currentState == AIstate.dying)
         {
-            MyRigid.velocity = Vector2.zero;
+            v = Vector2.zero;
         }
         #endregion
     }
@@ -80,42 +99,60 @@ public class RangedUnderling : MonoBehaviour
     {
         if (!cooldown && !escaping)
         {
-            RaycastHit2D hit;
-            if (Player.thePlayer.transform.position.x > transform.position.x)
+            if (Mathf.Abs(Vector2.Distance(Player.thePlayer.transform.position, transform.position)) < attackRange)
             {
-                MyRigid.velocity = transform.right * speed;
-                hit = Physics2D.Raycast(transform.position, transform.right, attackRange);
+                RaycastHit2D hit;
+                if (Player.thePlayer.transform.position.x > transform.position.x)
+                {
+                    hit = Physics2D.Raycast(transform.position, transform.right, attackRange);
+                }
+                else
+                {
+                    hit = Physics2D.Raycast(transform.position, -transform.right, attackRange);
+                }
+                if (hit)
+                {
+                    Debug.Log(hit.transform.gameObject.name);
+                }
+                if (hit && (hit.transform.gameObject.name == "Player" || hit.transform.name.Contains("Ice Wall")))
+                {
+                    StartCoroutine("AttackSFX");
+                    MyAnim.SetTrigger("isAttacking");
+                    attackTimer = 0;
+                    cooldown = true;
+                }
+                v = Vector2.zero;
             }
             else
             {
-                MyRigid.velocity = -transform.right * speed;
-                hit = Physics2D.Raycast(transform.position, -transform.right, attackRange);
-            }
-            if (hit && hit.transform.gameObject.name == "Player")
-            {
-                MyAnim.SetTrigger("isAttacking");
-                attackTimer = 0;
-                cooldown = true;
-                MyRigid.velocity = Vector2.zero;
+                if (Player.thePlayer.transform.position.x > transform.position.x)
+                {
+                    v = transform.right * speed;
+                }
+                else
+                {
+                    v = -transform.right * speed;
+                }
             }
         }
-        else if (Mathf.Abs(Player.thePlayer.transform.position.x - transform.position.x) < attackRange/2)
+        else if (Mathf.Abs(Player.thePlayer.transform.position.x - transform.position.x) < attackRange/3)
         {
             escaping = true;
             if (Player.thePlayer.transform.position.x > transform.position.x)
             {
-                MyRigid.velocity = -transform.right * runSpeed;
+                v = -transform.right * runSpeed;
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
             else
             {
-                MyRigid.velocity = transform.right * runSpeed;
+                v = transform.right * runSpeed;
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
         }
         else
         {
             escaping = false;
+
         }
         attackTimer += Time.deltaTime;
         if (attackTimer > attackInterval)
@@ -131,6 +168,10 @@ public class RangedUnderling : MonoBehaviour
             if (hit.transform.gameObject.name == "Player")
             {
                 Player.thePlayer.TakeDamage(damage);
+            }
+            else if (hit.transform.gameObject.name.Contains("Ice Wall"))
+            {
+                hit.transform.GetComponent<PlayerAbility>().TakeDamage();
             }
         }
     }
@@ -163,10 +204,16 @@ public class RangedUnderling : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction == Facing.left ? -transform.right : transform.right, raycastRange);
         if (hit)
         {
-            if (hit.transform.gameObject.name == "Player")
+            if (hit.transform.gameObject.name == "Player" || hit.transform.gameObject.name.Contains("Ice Wall"))
             {
                 currentState = AIstate.attacking;
             }
         }
+    }
+    public IEnumerator AttackSFX()
+    {
+        SFXManager3.theManager.PlaySFX("Crossbow_Draw");
+        yield return new WaitForSeconds(0.8f);
+        SFXManager3.theManager.PlaySFX("Underling_Arrow");
     }
 }

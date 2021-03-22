@@ -13,15 +13,17 @@ public class GameManager3 : MonoBehaviour
     }
     public Level currentLevel;
     private BoxCollider2D teleport;
-    public string teleportString;
+    private string teleportString;
     void Start()
     {
         teleport = GetComponent<BoxCollider2D>();
         switch (currentLevel)
         {
             case Level.level_0:
+                teleportString = "Prototype 3";
                 break;
             case Level.level_1:
+                teleportString = "Prototype 3 1";
                 break;
             case Level.level_2:
                 break;
@@ -30,10 +32,6 @@ public class GameManager3 : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == "Player")

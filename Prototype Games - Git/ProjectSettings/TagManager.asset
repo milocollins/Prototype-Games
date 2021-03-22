@@ -22,6 +22,9 @@ TagManager:
   - Death
   - Wall
   - Environment
+  - Tendril
+  - Boundary
+  - FlameBall
   layers:
   - Default
   - TransparentFX
@@ -42,8 +45,8 @@ TagManager:
   - Ground
   - FriendlyProjectile
   - Shield
-  - 
-  - 
+  - Tutorial
+  - Flameball
   - 
   - 
   - 

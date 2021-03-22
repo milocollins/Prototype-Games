@@ -10,23 +10,24 @@ public class Player : MonoBehaviour
     public Vector2 jumpForce;
     public float raycastDistance;
     private int jumpCount = 0;
-    private float x;
+    internal float x;
     internal int facing;
     public float cameraHeight;
     public float dashDistance;
     private bool dashCooldown = false;
     public float dashCooldownTime;
     private float startingScale;
-    private bool inputLock = false;
+    internal bool inputLock = false;
     public int meleeDamage;
     public int rangedDamage;
 
-    private Animator MyAnim;
+    internal Animator MyAnim;
     public static Player thePlayer;
     public int maxMana;
     public int maxHealth;
     private int mana;
     private int health;
+    public bool level2;
     public GameObject iceWall;
     public GameObject iceSpike;
     public GameObject meleeAttack;
@@ -35,13 +36,19 @@ public class Player : MonoBehaviour
     public int wallManaCost;
     public int meleeManaCost;
     public float meleeRange;
-    public List<AnimationClip> clips;   
+    public List<AnimationClip> clips;
+    public int manaRegen;
+    public float regenTimer;
+    private float currentRegenTime = 0f;
 
-    private void Start()
+    private void Awake()
     {
         thePlayer = this;
         MyRigid = GetComponent<Rigidbody2D>();
         MyAnim = GetComponent<Animator>();
+    }
+    private void Start()
+    {
         mana = maxMana;
         health = maxHealth;
         HUD.manaBar.value = mana;
@@ -68,7 +75,15 @@ public class Player : MonoBehaviour
         }
         if (inputLock)
         {
-            MyRigid.velocity = new Vector2(0f, MyRigid.velocity.y);
+            if (level2 && Level2.levelManager.cutScene)
+            {
+                MyRigid.velocity = new Vector2(x*speed, MyRigid.velocity.y);
+            
+            }
+            else
+            {
+                MyRigid.velocity = new Vector2(0f, MyRigid.velocity.y);
+            }
         }
         else
         {
@@ -81,6 +96,20 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //Regen
+        if (mana != maxMana)
+        {
+            if (currentRegenTime > regenTimer)
+            {
+                currentRegenTime = 0f;
+
+                Mathf.Clamp(mana += manaRegen, 0, 10);
+            }
+            else
+            {
+                currentRegenTime += Time.deltaTime;
+            }
+        }
         if (!inputLock)
         {
             Debug.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y - raycastDistance, transform.position.z), Color.red);
@@ -99,7 +128,6 @@ public class Player : MonoBehaviour
             }
             if (Mathf.Abs(x) > 0.01 && !dashCooldown && Input.GetKeyDown(KeyCode.LeftShift))
             {
-                Debug.Log("Dash");
                 Dash();
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -185,7 +213,7 @@ public class Player : MonoBehaviour
             MyAnim.SetTrigger("isHit");
         }
     }
-    private void PassAnim()
+    internal void PassAnim()
     {
         if (Mathf.Abs(x) > 0.01)
         {

@@ -126,7 +126,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myType: 2
   wallDistance: 2.64
+  maxWallHealth: 2
   spikeDistance: 0
+  meleeRange: 0
   MyAnim: {fileID: 2050190481608527130}
   spikeSpeed: 0
   wallHeight: 0.85
