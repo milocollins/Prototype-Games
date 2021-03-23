@@ -38,6 +38,7 @@ public class Level2 : MonoBehaviour
     public float VFXInterval;
     public GameObject deathVFX;
     public GameObject level3;
+    public GameObject tenseMusic;
 
     internal float cooldownInterval;
     internal static Level2 levelManager;
@@ -56,6 +57,8 @@ public class Level2 : MonoBehaviour
     internal int currentCount = 0;
     private BoxCollider2D MyCollider;
     public float cutScenePlayerSpeed;
+    public float lerpRate;
+    private bool cutsceneTrigger = true;
 
     private void Awake()
     {
@@ -75,6 +78,7 @@ public class Level2 : MonoBehaviour
         level3.SetActive(false);
         cooldownInterval = attackInterval1;
         RandomPosition();
+        tenseMusic.SetActive(false);
     }
 
     private void Update()
@@ -93,6 +97,7 @@ public class Level2 : MonoBehaviour
                 }
                 if (timer > 2.4f && !cutSceneTrigger2)
                 {
+                    SFXManager3.theManager.PlaySFX("Orc_Die");
                     Orc.GetComponent<Rigidbody2D>().AddTorque(OrcTorque);
                     Orc.GetComponent<Rigidbody2D>().AddForce(OrcForce);
                     Orc.GetComponent<BoxCollider2D>().enabled = false;
@@ -190,12 +195,16 @@ public class Level2 : MonoBehaviour
                     if (shieldActive)
                     {
                         Boss.theBoss.shield.SetActive(true);
+                        Boss.theBoss.shieldActive = true;
+                        //Boss.theBoss.Body.enabled = false;
                         SpawnBoss(Position_4);
                         Debug.Log(Position_4);
                     }
                     else
                     {
                         Boss.theBoss.shield.SetActive(false);
+                        Boss.theBoss.shieldActive = false;
+                        //Boss.theBoss.Body.enabled = true;
                         SpawnBoss(Position_5);
                         Debug.Log(Position_5);
                     }
@@ -253,35 +262,32 @@ public class Level2 : MonoBehaviour
         {
             if (!cooldown)
             {
-                if (Boss.theBoss.transform.position.y != Position_5.y)
-                {
-                    Boss.theBoss.Despawn();
-                    timer = 0f;
-                }
-                if (!Boss.theBoss.isSpawned)
+                if (!Boss.theBoss.isSpawned && cutsceneTrigger)
                 {
                     SpawnBoss(Position_5);
                     cooldown = true;
-                    timer = 0f;
                 }
-                else if (Boss.theBoss.transform.position.y == Position_5.y && Boss.theBoss.isSpawned)
+                else if (cutsceneTrigger)
                 {
                     finalcutScene = true;
                     timer = 0f;
+                    cutsceneTrigger = false;
                 }
-                
                 if (finalcutScene)
                 {
+                    Debug.Log(Boss.theBoss.transform.localScale.y);
                     timer += Time.deltaTime;
-                    Debug.Log("Scaling: "+ Boss.theBoss.transform.localScale.y);
-                    Boss.theBoss.transform.localScale = new Vector2(Boss.theBoss.transform.localScale.x, Boss.theBoss.transform.localScale.y + scaleIncrement*Time.deltaTime);
+                    Boss.theBoss.transform.localScale = new Vector2(transform.localScale.x, Mathf.Lerp(Boss.theBoss.transform.localScale.y, maxScale, lerpRate * Time.deltaTime));
                     if (timer > VFXInterval)
                     {
+                        float rX = Random.Range(Boss.theBoss.transform.position.x - 3, Boss.theBoss.transform.position.x + 3);
+                        float rY = Random.Range(Boss.theBoss.transform.position.y - 1.5f, Boss.theBoss.transform.position.y + 4);
                         timer = 0f;
-                        Instantiate(deathVFX, transform.position, Quaternion.identity);
+                        Instantiate(deathVFX, new Vector2(rX,rY), Quaternion.identity);
                     }
-                    if (Boss.theBoss.transform.localScale.y > maxScale)
+                    if (Boss.theBoss.transform.localScale.y >= maxScale - 0.1f)
                     {
+                        UIManager3.theManager.Win();
                         finalcutScene = false;
                         Boss.theBoss.Despawn();
                         level3.SetActive(true);
@@ -309,6 +315,8 @@ public class Level2 : MonoBehaviour
             case Phase.Phase_0:
                 currentPhase = Phase.Phase_1;
                 StartCoroutine("CooldownChange", attackInterval1);
+                tenseMusic.SetActive(true);
+                PanOutCamera();
                 break;
             case Phase.Phase_1:
                 currentPhase = Phase.Phase_2;
@@ -327,6 +335,8 @@ public class Level2 : MonoBehaviour
                     item.SetActive(false);
                 }
                 StartCoroutine("CooldownChange", phase4Interval);
+                SFXManager3.theManager.PlaySFX("deathb");
+                tenseMusic.SetActive(false);
                 break;
         }
     }
@@ -415,5 +425,11 @@ public class Level2 : MonoBehaviour
         cooldownInterval = phaseInterval;
         yield return new WaitForSeconds(phaseInterval);
         cooldownInterval = f;
+    }
+    public void PanOutCamera()
+    {
+        Camera.main.transform.parent = null;
+        Camera.main.transform.position = new Vector3(11, 7, -1);
+        Camera.main.orthographicSize = 15.26f;
     }
 }

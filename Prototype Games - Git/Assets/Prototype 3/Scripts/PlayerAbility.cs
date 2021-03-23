@@ -25,6 +25,7 @@ public class PlayerAbility : MonoBehaviour
 
     private void Start()
     {
+        UIManager3.theManager.UpdatePlayerStats();
         direction = Player.thePlayer.facing;
         transform.localScale = new Vector3(direction * transform.localScale.x, transform.localScale.y, transform.localScale.z);
         myRigid = GetComponent<Rigidbody2D>();
@@ -77,6 +78,7 @@ public class PlayerAbility : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(collision.gameObject.name);
         //0.7f
         int d = 0;
         if (myType == Type.ranged)
@@ -96,7 +98,10 @@ public class PlayerAbility : MonoBehaviour
             }
             else if (collision.gameObject.GetComponent<Boss>())
             {
-                collision.gameObject.GetComponent<Boss>().TakeDamage(d);
+                if (!Boss.theBoss.shieldActive)
+                {
+                    collision.gameObject.GetComponent<Boss>().TakeDamage(d);
+                }
             }
         }
         else if (collision.gameObject.GetComponent<Door>())

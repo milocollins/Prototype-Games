@@ -104,10 +104,12 @@ public class MeleeUnderling : MonoBehaviour
         {
             currentState = AIstate.dying;
             MyAnim.SetTrigger("isDead");
+            SFXManager3.theManager.PlaySFX("Underling_Die");
         }
         else
         {
             MyAnim.SetTrigger("isHit");
+            SFXManager3.theManager.PlaySFX("Underling_Hit");
         }
     }
     public void Die()

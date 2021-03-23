@@ -30,7 +30,8 @@ public class Boss : MonoBehaviour
     internal GameObject shield;
     private GameObject tendril1;
     private GameObject tendril2;
-    private PolygonCollider2D Body;
+    internal PolygonCollider2D Body;
+    internal bool shieldActive = false;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class Boss : MonoBehaviour
     }
     private void Start()
     {
+        Body = GetComponent<PolygonCollider2D>();
         currentHealth = maxHealth;
         Body = gameObject.GetComponent<PolygonCollider2D>();
         MyAnim = gameObject.GetComponent<Animator>();
@@ -48,12 +50,13 @@ public class Boss : MonoBehaviour
     {
         transform.position = vec;
         isSpawned = true;
+        SFXManager3.theManager.PlaySFX("Boss_Spawn");
     }
     public void Despawn()
     {
         Level2.levelManager.cooldown = true;
         MyAnim.SetBool("isDespawning", true);
-        //isSpawned = false;
+        SFXManager3.theManager.PlaySFX("Boss_Despawn");
     }
     public void Idle()
     {
@@ -70,10 +73,12 @@ public class Boss : MonoBehaviour
     public void Attack2()
     {
         Instantiate(Phase2Projectile);
+        SFXManager3.theManager.PlaySFX("Attack2");
     }
     public void Attack3()
     {
         Instantiate(Phase3Projectile);
+        SFXManager3.theManager.PlaySFX("Attack3");
     }
 
     public void ToggleActive()
@@ -82,10 +87,6 @@ public class Boss : MonoBehaviour
         isSpawned = false;
         gameObject.SetActive(false);
     }
-    //public void ToggleHitbox()
-    //{
-    //    Body.enabled = !Body.enabled;
-    //}
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -129,5 +130,9 @@ public class Boss : MonoBehaviour
             Level2.levelManager.cooldown = true;
             Level2.levelManager.NextPhase();
         }
+    }
+    public void SpawnSFX()
+    {
+        SFXManager3.theManager.PlaySFX("Attack1");
     }
 }

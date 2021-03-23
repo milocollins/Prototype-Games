@@ -25,8 +25,8 @@ public class Player : MonoBehaviour
     public static Player thePlayer;
     public int maxMana;
     public int maxHealth;
-    private int mana;
-    private int health;
+    internal int mana;
+    internal int health;
     public bool level2;
     public GameObject iceWall;
     public GameObject iceSpike;
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     public List<AnimationClip> clips;
     public int manaRegen;
     public float regenTimer;
-    private float currentRegenTime = 0f;
+    public float currentRegenTime;
 
     private void Awake()
     {
@@ -49,10 +49,9 @@ public class Player : MonoBehaviour
     }
     private void Start()
     {
-        mana = maxMana;
         health = maxHealth;
-        HUD.manaBar.value = mana;
-        HUD.healthBar.value = health;
+        mana = maxMana;
+        UIManager3.theManager.UpdatePlayerStats();
         startingScale = transform.localScale.x;
         if (transform.localScale.x >= 0)
         {
@@ -62,10 +61,6 @@ public class Player : MonoBehaviour
         {
             facing = -1;
         }
-    }
-    public void Die()
-    {
-        gameObject.SetActive(false);
     }
     private void FixedUpdate()
     {
@@ -78,7 +73,6 @@ public class Player : MonoBehaviour
             if (level2 && Level2.levelManager.cutScene)
             {
                 MyRigid.velocity = new Vector2(x*speed, MyRigid.velocity.y);
-            
             }
             else
             {
@@ -89,21 +83,18 @@ public class Player : MonoBehaviour
         {
             MyRigid.velocity = new Vector2(x * speed, MyRigid.velocity.y);
         }
-        HUD.manaBar.value = mana;
-        HUD.healthBar.value = health;
     }
 
 
     private void Update()
     {
-        //Regen
         if (mana != maxMana)
         {
             if (currentRegenTime > regenTimer)
             {
                 currentRegenTime = 0f;
-
                 Mathf.Clamp(mana += manaRegen, 0, 10);
+                UIManager3.theManager.UpdatePlayerStats();
             }
             else
             {
@@ -207,11 +198,14 @@ public class Player : MonoBehaviour
         if (health <= 0)  
         {
             MyAnim.SetTrigger("isDead");
+            SFXManager3.theManager.PlaySFX("Player_Die");
         }
         else
         {
             MyAnim.SetTrigger("isHit");
+            SFXManager3.theManager.PlaySFX("Player_Hit");
         }
+        UIManager3.theManager.UpdatePlayerStats();
     }
     internal void PassAnim()
     {
@@ -231,5 +225,42 @@ public class Player : MonoBehaviour
         inputLock = true;
         yield return new WaitForSeconds(f);
         inputLock = false;
+    }
+    public void PlayStep()
+    {
+        SFXManager3.theManager.PlaySFX("Footstep1");
+    }
+    public void DeathScreen()
+    {
+        inputLock = true;
+        Camera.main.transform.parent = null;
+        StartCoroutine("FadeToWhite");
+        foreach (var item in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            if (item.GetComponent<MeleeUnderling>())
+            {
+                item.GetComponent<MeleeUnderling>().enabled = false;
+            }
+            else if (item.GetComponent<RangedUnderling>())
+            {
+                item.GetComponent<RangedUnderling>().enabled = false;
+            }
+            else
+            {
+                item.GetComponent<Boss>().enabled = false;
+            }
+        }
+    }
+    public IEnumerator FadeToWhite()
+    {
+        UIManager3.theManager.Die();
+        yield return new WaitForSeconds(4f);
+        StartCoroutine("ReloadScene");
+    }
+    public IEnumerator ReloadScene()
+    {
+        UIManager3.theManager.Die1();
+        yield return new WaitForSeconds(3f);
+        GameManager3.theManager.ReloadScene();
     }
 }

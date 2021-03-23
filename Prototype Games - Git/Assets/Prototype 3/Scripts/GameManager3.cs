@@ -14,7 +14,12 @@ public class GameManager3 : MonoBehaviour
     public Level currentLevel;
     private BoxCollider2D teleport;
     private string teleportString;
-    void Start()
+    public static GameManager3 theManager;
+    public void Awake()
+    {
+        theManager = this;
+    }
+    private void Start()
     {
         teleport = GetComponent<BoxCollider2D>();
         switch (currentLevel)
@@ -37,6 +42,20 @@ public class GameManager3 : MonoBehaviour
         if (collision.gameObject.name == "Player")
         {
             SceneManager.LoadScene(teleportString);
+        }
+    }
+    public void ReloadScene()
+    {
+        switch (currentLevel)
+        {
+            case Level.level_1:
+                SceneManager.LoadScene("Prototype 3");
+                break;
+            case Level.level_2:
+                SceneManager.LoadScene("Prototype 3 1");
+                break;
+            default:
+                break;
         }
     }
 }

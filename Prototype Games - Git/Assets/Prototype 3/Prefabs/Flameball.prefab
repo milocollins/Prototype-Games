@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
-  speed: 8
+  speed: 10
   RNG: 1
   minXBoundary: -12
   maxXBoundary: 34

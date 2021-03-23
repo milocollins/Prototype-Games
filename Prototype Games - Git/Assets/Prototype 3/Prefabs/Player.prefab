@@ -237,15 +237,15 @@ MonoBehaviour:
   dashCooldownTime: 1.5
   meleeDamage: 2
   rangedDamage: 2
-  maxMana: 10
-  maxHealth: 10
+  maxMana: 5
+  maxHealth: 15
   level2: 0
   iceWall: {fileID: 4072347381424905427, guid: 50ee5b9f019c20e49a985edac15b5852, type: 3}
   iceSpike: {fileID: 7932843031326130542, guid: 7106cf9719810e64e88c74a0ca5eddbf, type: 3}
   meleeAttack: {fileID: 5151282990409085258, guid: ba28ed8566fbb2b4483760062d64514c, type: 3}
   HUD: {fileID: 0}
-  spikeManaCost: 3
-  wallManaCost: 3
+  spikeManaCost: 1
+  wallManaCost: 2
   meleeManaCost: 1
   meleeRange: 1
   clips:
@@ -253,6 +253,7 @@ MonoBehaviour:
   - {fileID: 7400000, guid: b4367039f4adff14ab3033ec613343b5, type: 2}
   manaRegen: 1
   regenTimer: 3
+  currentRegenTime: 0
 --- !u!95 &995611134128890080
 Animator:
   serializedVersion: 3

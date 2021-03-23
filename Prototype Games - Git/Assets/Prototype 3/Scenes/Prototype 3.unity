@@ -45742,10 +45742,6 @@ PrefabInstance:
       propertyPath: HUD
       value: 
       objectReference: {fileID: 704216976}
-    - target: {fileID: 995611134128890108, guid: 51a604c6b58c2ad47b1206d00f84df23, type: 3}
-      propertyPath: level2
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 995611134128890109, guid: 51a604c6b58c2ad47b1206d00f84df23, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -45921,10 +45917,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5876245992486812994, guid: 27449391b64d037409289d8beffecbd0, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5876245993186307115, guid: 27449391b64d037409289d8beffecbd0, type: 3}
       propertyPath: m_Name
       value: HUD
@@ -46013,9 +46005,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5876245993392350377, guid: 27449391b64d037409289d8beffecbd0, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
+    - target: {fileID: 5876245993186307124, guid: 27449391b64d037409289d8beffecbd0, type: 3}
+      propertyPath: lerpRate
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27449391b64d037409289d8beffecbd0, type: 3}
@@ -46130,10 +46122,6 @@ PrefabInstance:
     - target: {fileID: 8392944488093881898, guid: 97f9279db6ce42c44abda55f55d3ca02, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8392944488093881899, guid: 97f9279db6ce42c44abda55f55d3ca02, type: 3}
-      propertyPath: m_SortingOrder
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97f9279db6ce42c44abda55f55d3ca02, type: 3}
