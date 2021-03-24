@@ -18,11 +18,36 @@ public class UIManager3 : MonoBehaviour
     private Color color4 = new Color(1f,0f,0f,1f);
     private Color color5 = new Color(1f, 1f, 1f, 1f);
     private Color color6 = new Color(1f, 1f, 1f, 0f);
+    public Color color7;
     public float lerpRate;
     public float winLerpRate;
     private bool die0 = false;
     private bool die1 = false;
     private bool win = false;
+    private float timer = 0f;
+    public float winInterval;
+    public GameObject winText;
+    public float winTextLerp;
+
+    [Header("Pause Menu:")]
+
+    public GameObject pauseMenu;
+    public Button resumeButton;
+    public Button menuButton;
+    private bool paused = false;
+
+
+    public void Awake()
+    {
+        theManager = this;
+        healthRenderer = transform.GetChild(0).GetChild(1).GetComponent<Image>();
+        manaRenderer = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        DeathScreen = transform.GetChild(1).gameObject;
+        winScreen = transform.GetChild(2).gameObject;
+        DeathScreen.SetActive(false);
+        pauseMenu.SetActive(false);
+        winText.SetActive(false);
+    }
     private void Start()
     {
         DeathScreen.transform.GetChild(0).GetComponent<Image>().color = color1;
@@ -31,6 +56,18 @@ public class UIManager3 : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetButtonDown("Pause"))
+        {
+            if (!paused)
+            {
+                PauseGame();
+                paused = true;
+            }
+            else
+            {
+                ResumeGame();
+            }
+        }
         if (die0)
         {
             Image temp1 = DeathScreen.transform.GetChild(0).GetComponent<Image>();
@@ -45,18 +82,15 @@ public class UIManager3 : MonoBehaviour
         }
         else if (win)
         {
+            timer += Time.deltaTime;
             Image temp4 = winScreen.transform.GetComponent<Image>();
             temp4.color = Color.Lerp(temp4.color, color5, winLerpRate * Time.deltaTime);
+            winText.GetComponent<Text>().color = Color.Lerp(winText.GetComponent<Text>().color, color7, winLerpRate*Time.deltaTime);
+            if (timer > winInterval)
+            {
+                GameManager3.theManager.MenuNav();
+            }
         }
-    }
-    public void Awake()
-    {
-        theManager = this;
-        healthRenderer = transform.GetChild(0).GetChild(1).GetComponent<Image>();
-        manaRenderer = transform.GetChild(0).GetChild(0).GetComponent<Image>();
-        DeathScreen = transform.GetChild(1).gameObject;
-        winScreen = transform.GetChild(2).gameObject;
-        DeathScreen.SetActive(false);
     }
     public void UpdatePlayerStats()
     {
@@ -84,6 +118,25 @@ public class UIManager3 : MonoBehaviour
     public void Win()
     {
         Player.thePlayer.inputLock = true;
+        winText.SetActive(true);
+        winText.GetComponent<Text>().color = color1;
         win = true;
+    }
+    private void PauseGame()
+    {
+        Player.thePlayer.inputLock = true;
+        Time.timeScale = 0f;
+        pauseMenu.SetActive(true);
+    }
+    public void MenuNav()
+    {
+        GameManager3.theManager.MenuNav();
+    }
+    public void ResumeGame()
+    {
+        Player.thePlayer.inputLock = false;
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+        paused = false;
     }
 }

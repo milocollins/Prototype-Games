@@ -10,6 +10,7 @@ public class Projectile2 : MonoBehaviour
     private Vector3 Target;
     private Vector3 Parent;
     private Rigidbody2D MyRigid;
+    private Animator MyAnim;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class Projectile2 : MonoBehaviour
         Target = Player.thePlayer.transform.position;
         transform.position = Parent;
         MyRigid = GetComponent<Rigidbody2D>();
+        MyAnim = GetComponent<Animator>();
         MyRigid.velocity = Vector3.Normalize(Target - Parent) * speed;
     }
     private void OnTriggerEnter2D(Collider2D collider)
@@ -24,16 +26,33 @@ public class Projectile2 : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             collider.GetComponent<Player>().TakeDamage(damage);
-            gameObject.SetActive(false);
+            MyAnim.SetTrigger("isHit");
+            MyRigid.bodyType = RigidbodyType2D.Static;
         }
         if (collider.CompareTag("Boundary"))
         {
             gameObject.SetActive(false);
+            MyRigid.bodyType = RigidbodyType2D.Static;
+        }
+        if (collider.CompareTag("Environment"))
+        {
+            MyAnim.SetTrigger("isHit");
+            MyRigid.bodyType = RigidbodyType2D.Static;
         }
         if (collider.transform.gameObject.name.Contains("Ice Wall"))
         {
             collider.gameObject.GetComponent<PlayerAbility>().TakeDamage();
-            gameObject.SetActive(false);
+            MyAnim.SetTrigger("isHit");
+            MyRigid.bodyType = RigidbodyType2D.Static;
         }
+    }
+    public void HitSFX()
+    {
+        GetComponent<AudioSource>().enabled = false;
+        SFXManager3.theManager.PlaySFX("Projectile2 Hit");
+    }
+    public void SelfDestruct()
+    {
+        Destroy(gameObject);
     }
 }

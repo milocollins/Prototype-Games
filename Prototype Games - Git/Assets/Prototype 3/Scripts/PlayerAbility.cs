@@ -22,6 +22,7 @@ public class PlayerAbility : MonoBehaviour
     public Animator MyAnim;
     public int spikeSpeed;
     public float wallHeight;
+    public GameObject wallShatter;
 
     private void Start()
     {
@@ -84,6 +85,7 @@ public class PlayerAbility : MonoBehaviour
         if (myType == Type.ranged)
         {
             MyAnim.SetTrigger("Hit");
+            SFXManager3.theManager.PlaySFX("Ice Spell 17");
             d = Player.thePlayer.rangedDamage;
         }
         if (collision.gameObject.CompareTag("Enemy"))
@@ -130,6 +132,8 @@ public class PlayerAbility : MonoBehaviour
             --wallHealth;
             if (wallHealth<= 0)
             {
+                SFXManager3.theManager.PlaySFX("Ice Spell 17");
+                Instantiate(wallShatter, transform.position, Quaternion.identity);
                 gameObject.SetActive(false);
             }
         }

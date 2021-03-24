@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-    [Header ("Prefabs:")]
+    [Header("Prefabs:")]
     public GameObject Tendril;
     public GameObject Phase2Projectile;
     public GameObject Phase3Projectile;
 
-    [Header ("Parameters:")]
+    [Header("Parameters:")]
     public int contactDamage;
     public float tendrilDistance;
     public float tendrilTimer;
@@ -54,6 +54,11 @@ public class Boss : MonoBehaviour
     }
     public void Despawn()
     {
+        StartCoroutine("DespawnAnim");
+    }
+    public IEnumerator DespawnAnim()
+    {
+        yield return new WaitForSeconds(0.3f);
         Level2.levelManager.cooldown = true;
         MyAnim.SetBool("isDespawning", true);
         SFXManager3.theManager.PlaySFX("Boss_Despawn");
@@ -99,12 +104,13 @@ public class Boss : MonoBehaviour
         yield return new WaitForSeconds(tendrilTimer);
         tendril1.GetComponent<Animator>().SetBool("isDespawning", true);
         tendril2.GetComponent<Animator>().SetBool("isDespawning", true);
-        Debug.Log("despawn");
     }
     public void TakeDamage(int d)
     {
         currentHealth -= d;
-        Debug.Log("Damaged");
+        BossHealth.bossHealth.UpdateHealth();
+        SFXManager3.theManager.PlaySFX("Boss_Hit");
+        MyAnim.SetTrigger("isHit");
         if (Level2.levelManager.currentPhase == Level2.Phase.Phase_1 && currentHealth <= Level2.levelManager.phase2Health)
         {
             Despawn();

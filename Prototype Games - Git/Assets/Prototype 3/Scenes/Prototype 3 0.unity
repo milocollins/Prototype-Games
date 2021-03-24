@@ -2099,7 +2099,7 @@ GameObject:
   - component: {fileID: 245045662}
   - component: {fileID: 245045661}
   - component: {fileID: 245045660}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2732,7 +2732,7 @@ GameObject:
   - component: {fileID: 428116571}
   - component: {fileID: 428116573}
   - component: {fileID: 428116572}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2779,7 +2779,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: af2729d07652ae04b94171eeefbfe535, type: 3}
     m_FontSize: 37
     m_FontStyle: 0
     m_BestFit: 0
@@ -2971,6 +2971,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1607486915, guid: 27449391b64d037409289d8beffecbd0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -55.95117
+      objectReference: {fileID: 0}
     - target: {fileID: 5876245992486812994, guid: 27449391b64d037409289d8beffecbd0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -21507,7 +21511,7 @@ GameObject:
   - component: {fileID: 1589978832}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24572,7 +24576,7 @@ GameObject:
   - component: {fileID: 1692188189}
   - component: {fileID: 1692188188}
   - component: {fileID: 1692188187}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Level0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24704,7 +24708,7 @@ GameObject:
   - component: {fileID: 1696996941}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

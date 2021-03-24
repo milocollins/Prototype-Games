@@ -204,7 +204,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0989905, y: -0.065295815}
+  m_Offset: {x: -0.0989905, y: -0.060346425}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -215,7 +215,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.46299523, y: 0.8041122}
+  m_Size: {x: 0.46299523, y: 0.7942134}
   m_EdgeRadius: 0
 --- !u!114 &995611134128890108
 MonoBehaviour:
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   jumpForce: {x: 0, y: 500}
-  raycastDistance: 1.47
+  raycastDistance: 1.41
   cameraHeight: 1.88
   dashDistance: 3500
   dashCooldownTime: 1.5
@@ -253,7 +253,9 @@ MonoBehaviour:
   - {fileID: 7400000, guid: b4367039f4adff14ab3033ec613343b5, type: 2}
   manaRegen: 1
   regenTimer: 3
-  currentRegenTime: 0
+  currentRegenTime: 1
+  meleeVFXObj: {fileID: 8728076748521007823, guid: e7fcf140870d66948aa17e94181bc7dd, type: 3}
+  DoubleJumpVFXObj: {fileID: 5315073258592089860, guid: 665f5ad95184b134183de187d658e99a, type: 3}
 --- !u!95 &995611134128890080
 Animator:
   serializedVersion: 3

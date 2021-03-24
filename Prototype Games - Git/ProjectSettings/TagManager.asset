@@ -25,6 +25,8 @@ TagManager:
   - Tendril
   - Boundary
   - FlameBall
+  - IceWall
+  - Platform
   layers:
   - Default
   - TransparentFX

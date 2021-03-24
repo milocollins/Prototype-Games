@@ -37,7 +37,7 @@ public class Level2 : MonoBehaviour
     public float phase4Interval;
     public float VFXInterval;
     public GameObject deathVFX;
-    public GameObject level3;
+    //public GameObject level3;
     public GameObject tenseMusic;
 
     internal float cooldownInterval;
@@ -60,6 +60,15 @@ public class Level2 : MonoBehaviour
     public float lerpRate;
     private bool cutsceneTrigger = true;
 
+    public float cameraVectorLerp;
+    public float cameraSizeLerp;
+    private bool cameraPosTrigger = false;
+    public Vector3 cameraPos1;
+    public float cameraSize1;
+    private bool lerpCamera = false;
+    private bool sizeLerped = false;
+    private bool vectorLerped = false;
+
     private void Awake()
     {
         levelManager = this;
@@ -75,10 +84,10 @@ public class Level2 : MonoBehaviour
         Player.thePlayer.x = cutScenePlayerSpeed;
         Player.thePlayer.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(5f, 0f);
         Boss.theBoss.gameObject.SetActive(false);
-        level3.SetActive(false);
         cooldownInterval = attackInterval1;
         RandomPosition();
         tenseMusic.SetActive(false);
+        BossHealth.bossHealth.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -102,6 +111,7 @@ public class Level2 : MonoBehaviour
                     Orc.GetComponent<Rigidbody2D>().AddForce(OrcForce);
                     Orc.GetComponent<BoxCollider2D>().enabled = false;
                     cutSceneTrigger2 = true;
+                    lerpCamera = true;
                 }
                 if (timer > cutSceneTimer)
                 {
@@ -115,6 +125,17 @@ public class Level2 : MonoBehaviour
         }
         else if (currentPhase == Phase.Phase_1)
         {
+            if (lerpCamera)
+            {
+                if (!cameraPosTrigger)
+                {
+                    Camera.main.transform.parent = null;
+                    Debug.Log("LERPHIT");
+                    BossHealth.bossHealth.gameObject.SetActive(true);
+                    cameraPosTrigger = true;
+                }
+                PanOutCamera();
+            }
             Position_1 = new Vector2(Player.thePlayer.transform.position.x, Player.thePlayer.transform.position.y - 1.5f);
             if (!Boss.theBoss.isSpawned && !cooldown)
             {
@@ -265,6 +286,7 @@ public class Level2 : MonoBehaviour
                 if (!Boss.theBoss.isSpawned && cutsceneTrigger)
                 {
                     SpawnBoss(Position_5);
+                    BossHealth.bossHealth.gameObject.SetActive(false);
                     cooldown = true;
                 }
                 else if (cutsceneTrigger)
@@ -290,7 +312,7 @@ public class Level2 : MonoBehaviour
                         UIManager3.theManager.Win();
                         finalcutScene = false;
                         Boss.theBoss.Despawn();
-                        level3.SetActive(true);
+                        //level3.SetActive(true);
                         this.gameObject.SetActive(false);
                     }
                 }
@@ -337,6 +359,7 @@ public class Level2 : MonoBehaviour
                 StartCoroutine("CooldownChange", phase4Interval);
                 SFXManager3.theManager.PlaySFX("deathb");
                 tenseMusic.SetActive(false);
+                BossHealth.bossHealth.gameObject.SetActive(false);
                 break;
         }
     }
@@ -428,8 +451,31 @@ public class Level2 : MonoBehaviour
     }
     public void PanOutCamera()
     {
-        Camera.main.transform.parent = null;
-        Camera.main.transform.position = new Vector3(11, 7, -1);
-        Camera.main.orthographicSize = 15.26f;
+        float x = Camera.main.transform.position.x;
+        float y = Camera.main.transform.position.y;
+        float s = Camera.main.orthographicSize;
+        if (Mathf.Abs(Camera.main.orthographicSize - cameraSize1) > 0.05)
+        {
+            Camera.main.orthographicSize = Mathf.Lerp(s, cameraSize1, cameraSizeLerp*Time.deltaTime);
+        }
+        else if (Camera.main.orthographicSize != cameraSize1)
+        {
+            Camera.main.orthographicSize = cameraSize1;
+            sizeLerped = true;
+        }
+        if (Mathf.Abs(Vector3.Distance(Camera.main.transform.position, cameraPos1)) > 0.05)
+        {
+            Camera.main.transform.position = new Vector3(Mathf.Lerp(x, cameraPos1.x, cameraVectorLerp*Time.deltaTime), Mathf.Lerp(y, cameraPos1.y, cameraVectorLerp*Time.deltaTime), cameraPos1.z);
+        }
+        else if(Camera.main.transform.position != cameraPos1)
+        {
+            Camera.main.transform.position = cameraPos1;
+            vectorLerped = true;
+        }
+        if (vectorLerped && sizeLerped)
+        {
+            lerpCamera = false;
+        }
     }
+    
 }

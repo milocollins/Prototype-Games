@@ -118,8 +118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
-  speed: 10
-  RNG: 1
+  speed: 12
+  timerInterval: 1.2
   minXBoundary: -12
   maxXBoundary: 34
   maxYBoundary: 18

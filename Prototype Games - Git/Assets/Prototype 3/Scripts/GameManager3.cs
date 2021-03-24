@@ -58,4 +58,8 @@ public class GameManager3 : MonoBehaviour
                 break;
         }
     }
+    public void MenuNav()
+    {
+        SceneManager.LoadScene("Prototype3 Menu");
+    }
 }

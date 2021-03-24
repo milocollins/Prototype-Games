@@ -132,6 +132,7 @@ MonoBehaviour:
   MyAnim: {fileID: 2050190481608527130}
   spikeSpeed: 0
   wallHeight: 0.85
+  wallShatter: {fileID: 6796651533761477653, guid: e4f137f2975f5ae4a80a730bb2ecb823, type: 3}
 --- !u!50 &176947682313633759
 Rigidbody2D:
   serializedVersion: 4

@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
     public int manaRegen;
     public float regenTimer;
     public float currentRegenTime;
+    public GameObject meleeVFXObj;
+    public GameObject DoubleJumpVFXObj;
 
     private void Awake()
     {
@@ -84,7 +86,12 @@ public class Player : MonoBehaviour
             MyRigid.velocity = new Vector2(x * speed, MyRigid.velocity.y);
         }
     }
-
+    public IEnumerator DoubleJumpVFX()
+    {
+        GameObject tempObj = Instantiate(DoubleJumpVFXObj, new Vector2(transform.position.x, transform.position.y -0.8f), Quaternion.Euler(0f, 0f, 180f));
+        yield return new WaitForSeconds(0.6f);
+        Destroy(tempObj);
+    }
 
     private void Update()
     {
@@ -105,17 +112,25 @@ public class Player : MonoBehaviour
         {
             Debug.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y - raycastDistance, transform.position.z), Color.red);
             x = Input.GetAxisRaw("Horizontal");
-            if (Input.GetButtonDown("Jump") && jumpCount < 1)
+            if (Input.GetButtonDown("Jump"))
             {
-                if (jumpCount == 1)
+                Debug.Log(jumpCount);
+                if (jumpCount < 2)
                 {
-                    MyRigid.AddForce(new Vector2(jumpForce.x, jumpForce.y/2));
+                    if (IsGrounded())
+                    {
+                        MyRigid.AddForce(jumpForce);
+                        jumpCount = 1;
+                    }
+                    else
+                    {
+                        MyRigid.AddForce(jumpForce*1.2f);
+                        StartCoroutine("DoubleJumpVFX");
+                        SFXManager3.theManager.PlaySFX("Ice_Melee");
+                        jumpCount = 2;
+                    }
+                    
                 }
-                else
-                {
-                    MyRigid.AddForce(jumpForce);
-                }
-                ++jumpCount;
             }
             if (Mathf.Abs(x) > 0.01 && !dashCooldown && Input.GetKeyDown(KeyCode.LeftShift))
             {
@@ -146,6 +161,7 @@ public class Player : MonoBehaviour
                 if (mana - meleeManaCost >= 0)
                 {
                     Instantiate(meleeAttack);
+                    StartCoroutine("MeleeVFX");
                     mana -= meleeManaCost;
                     MyAnim.SetTrigger("Attack2");
                     StartCoroutine("InputLockToggle", clips[0].length);
@@ -164,13 +180,34 @@ public class Player : MonoBehaviour
         }
         PassAnim();
     }
+    private IEnumerator MeleeVFX()
+    {
+        GameObject tempObj = Instantiate(meleeVFXObj, transform.position, Quaternion.identity);
+        tempObj.transform.parent = transform;
+        tempObj.transform.localPosition = new Vector2(0.62f, 0.15f);
+        if (facing == 1)
+        {
+            tempObj.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else
+        {
+            tempObj.transform.localScale = new Vector2(-1*tempObj.transform.localScale.x,tempObj.transform.localScale.y);
+            tempObj.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        tempObj.transform.parent = null;
+        yield return new WaitForSeconds(0.4f);
+        Destroy(tempObj);
+    }
     private bool IsGrounded()
     {
         bool tempBool = false;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, raycastDistance);
         if (hit)
         {
-            tempBool = true;
+            if (hit.transform.CompareTag("Environment") || hit.transform.gameObject.name.Contains("Ice Wall") || hit.transform.CompareTag("Platform"))
+            {
+                tempBool = true;
+            }
         }
         return tempBool;
     }
@@ -224,6 +261,14 @@ public class Player : MonoBehaviour
     {
         inputLock = true;
         yield return new WaitForSeconds(f);
+        inputLock = false;
+    }
+    public void InputToggleTrue()
+    {
+        inputLock = true;
+    }
+    public void InputToggleFalse()
+    {
         inputLock = false;
     }
     public void PlayStep()
